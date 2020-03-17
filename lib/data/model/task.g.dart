@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of Task;
+part of task;
 
 // **************************************************************************
 // BuiltValueGenerator
@@ -18,8 +18,6 @@ class _$TaskSerializer implements StructuredSerializer<Task> {
   Iterable<Object> serialize(Serializers serializers, Task object,
       {FullType specifiedType = FullType.unspecified}) {
     final result = <Object>[
-      'id',
-      serializers.serialize(object.id, specifiedType: const FullType(String)),
       'body',
       serializers.serialize(object.body, specifiedType: const FullType(String)),
     ];
@@ -43,10 +41,6 @@ class _$TaskSerializer implements StructuredSerializer<Task> {
       iterator.moveNext();
       final dynamic value = iterator.current;
       switch (key) {
-        case 'id':
-          result.id = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String;
-          break;
         case 'body':
           result.body = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
@@ -64,8 +58,6 @@ class _$TaskSerializer implements StructuredSerializer<Task> {
 
 class _$Task extends Task {
   @override
-  final String id;
-  @override
   final String body;
   @override
   final DateTime completeTime;
@@ -73,10 +65,7 @@ class _$Task extends Task {
   factory _$Task([void Function(TaskBuilder) updates]) =>
       (new TaskBuilder()..update(updates)).build();
 
-  _$Task._({this.id, this.body, this.completeTime}) : super._() {
-    if (id == null) {
-      throw new BuiltValueNullFieldError('Task', 'id');
-    }
+  _$Task._({this.body, this.completeTime}) : super._() {
     if (body == null) {
       throw new BuiltValueNullFieldError('Task', 'body');
     }
@@ -93,21 +82,18 @@ class _$Task extends Task {
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
     return other is Task &&
-        id == other.id &&
         body == other.body &&
         completeTime == other.completeTime;
   }
 
   @override
   int get hashCode {
-    return $jf(
-        $jc($jc($jc(0, id.hashCode), body.hashCode), completeTime.hashCode));
+    return $jf($jc($jc(0, body.hashCode), completeTime.hashCode));
   }
 
   @override
   String toString() {
     return (newBuiltValueToStringHelper('Task')
-          ..add('id', id)
           ..add('body', body)
           ..add('completeTime', completeTime))
         .toString();
@@ -116,10 +102,6 @@ class _$Task extends Task {
 
 class TaskBuilder implements Builder<Task, TaskBuilder> {
   _$Task _$v;
-
-  String _id;
-  String get id => _$this._id;
-  set id(String id) => _$this._id = id;
 
   String _body;
   String get body => _$this._body;
@@ -134,7 +116,6 @@ class TaskBuilder implements Builder<Task, TaskBuilder> {
 
   TaskBuilder get _$this {
     if (_$v != null) {
-      _id = _$v.id;
       _body = _$v.body;
       _completeTime = _$v.completeTime;
       _$v = null;
@@ -158,7 +139,7 @@ class TaskBuilder implements Builder<Task, TaskBuilder> {
   @override
   _$Task build() {
     final _$result =
-        _$v ?? new _$Task._(id: id, body: body, completeTime: completeTime);
+        _$v ?? new _$Task._(body: body, completeTime: completeTime);
     replace(_$result);
     return _$result;
   }

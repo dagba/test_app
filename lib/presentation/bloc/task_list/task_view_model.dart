@@ -1,7 +1,6 @@
 import 'package:testapp/data/model/task.dart';
 
 class TaskViewModel {
-  bool isTimeSpecified;
   String timeLeft;
   String completeTime;
   String body;
@@ -10,8 +9,9 @@ class TaskViewModel {
     final currentDate = DateTime.now();
     final difference = currentDate.difference(task.completeTime);
 
-    this.isTimeSpecified = task.completeTime != null;
-    if (this.isTimeSpecified) {
+    final isTimeSpecified = task.completeTime != null;
+
+    if (isTimeSpecified) {
       this.timeLeft =
           "${difference.inHours} ${difference.inMinutes} ${difference.inSeconds} $_Constants.timeLeft";
       this.completeTime =

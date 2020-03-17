@@ -1,16 +1,14 @@
 import 'package:testapp/presentation/bloc/base/event_base.dart';
 
-abstract class LoginEvent extends EventBase {
-  const LoginEvent();
+abstract class TaskListEvent extends EventBase {
+  const TaskListEvent();
 }
 
-class LoginSigning extends LoginEvent {
-  final String username;
-  final String password;
-
-  const LoginSigning({this.username, this.password});
+class TaskListCreate extends TaskListEvent {
+  final String text;
+  const TaskListCreate(this.text);
 }
 
-class LoginRestore extends LoginEvent {
-  const LoginRestore();
+class TaskListInit extends TaskListEvent {
+  const TaskListInit();
 }

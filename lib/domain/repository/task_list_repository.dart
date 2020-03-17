@@ -2,17 +2,16 @@ import 'package:jiffy/jiffy.dart';
 import 'package:testapp/data/model/task.dart';
 
 abstract class TaskListRepository {
-  void addTask(String text);
-  List<Task> getSortedTasks();
+  void addTask({String text});
+  Future<List<Task>> getSortedTasks();
 }
 
 class TaskListRepositoryImpl implements TaskListRepository {
   List<Task> tasks = [];
 
   TaskListRepositoryImpl({this.tasks = const []});
-//TODO remove whitespaces and filter text and create view models in bloc
   @override
-  void addTask(String text) {
+  void addTask({String text}) {
     final separatedText = text.split(" "); // split the text to time and body
     String body = "";
     DateTime completeTime;
@@ -43,7 +42,7 @@ class TaskListRepositoryImpl implements TaskListRepository {
   }
 
   @override
-  List<Task> getSortedTasks() {
+  Future<List<Task>> getSortedTasks() async {
     final noTimeTasks = tasks.where((t) => t.completeTime == null);
 
     List<Task> withTimeSortedTasks = tasks

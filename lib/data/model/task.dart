@@ -13,6 +13,7 @@ abstract class Task implements Built<Task, TaskBuilder> {
   @BuiltValueField(wireName: 'body')
   String get body;
   @BuiltValueField(wireName: 'complete_time')
+  @nullable
   DateTime get completeTime;
 
   Task._();

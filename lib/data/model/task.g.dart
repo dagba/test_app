@@ -22,11 +22,13 @@ class _$TaskSerializer implements StructuredSerializer<Task> {
       serializers.serialize(object.id, specifiedType: const FullType(String)),
       'body',
       serializers.serialize(object.body, specifiedType: const FullType(String)),
-      'complete_time',
-      serializers.serialize(object.completeTime,
-          specifiedType: const FullType(DateTime)),
     ];
-
+    if (object.completeTime != null) {
+      result
+        ..add('complete_time')
+        ..add(serializers.serialize(object.completeTime,
+            specifiedType: const FullType(DateTime)));
+    }
     return result;
   }
 
@@ -77,9 +79,6 @@ class _$Task extends Task {
     }
     if (body == null) {
       throw new BuiltValueNullFieldError('Task', 'body');
-    }
-    if (completeTime == null) {
-      throw new BuiltValueNullFieldError('Task', 'completeTime');
     }
   }
 

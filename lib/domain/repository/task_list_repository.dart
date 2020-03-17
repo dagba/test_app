@@ -45,7 +45,11 @@ class TaskListRepositoryImpl implements TaskListRepository {
   @override
   List<Task> getSortedTasks() {
     final noTimeTasks = tasks.where((t) => t.completeTime == null);
-    List<Task> withTimeSortedTasks = tasks.where((t) => t.completeTime != null);
+
+    List<Task> withTimeSortedTasks = tasks
+      ..where((t) => t.completeTime != null)
+      ..where((t) => DateTime.now().day == t.completeTime.day);
+
     withTimeSortedTasks
         .sort((t1, t2) => t1.completeTime.compareTo(t2.completeTime));
 

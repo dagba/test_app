@@ -4,11 +4,11 @@ abstract class TaskListEvent extends EventBase {
   const TaskListEvent();
 }
 
-class TaskListCreate extends TaskListEvent {
-  final String text;
-  const TaskListCreate(this.text);
-}
-
 class TaskListInit extends TaskListEvent {
   const TaskListInit();
+}
+
+class TaskListSubmitted extends TaskListEvent {
+  final String text;
+  const TaskListSubmitted({this.text});
 }

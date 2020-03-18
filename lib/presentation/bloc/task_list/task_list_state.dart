@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:testapp/presentation/bloc/base/state_base.dart';
 import 'package:testapp/presentation/bloc/task_list/task_view_model.dart';
 
@@ -12,18 +13,18 @@ class TaskListLoading extends TaskListState {
 class TaskListAdd extends TaskListState {
   final List<TaskViewModel> models;
 
-  const TaskListAdd(this.models);
+  const TaskListAdd({@required this.models});
 }
 
 class TaskListError extends TaskListState {
   final String message;
 
-  const TaskListError({this.message});
+  const TaskListError({@required this.message});
 }
 
 class TaskListEmpty extends TaskListState {
   final String header;
   final String body;
 
-  const TaskListEmpty({this.header, this.body});
+  const TaskListEmpty({@required this.header, @required this.body});
 }

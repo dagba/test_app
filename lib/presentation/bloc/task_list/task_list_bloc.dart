@@ -17,6 +17,7 @@ class TaskListBloc implements BlocBase<TaskListEvent, TaskListState> {
 
   TaskListBloc({TaskListRepositoryImpl repository}) {
     this._repository = repository;
+    _updateViewState();
   }
 
   @override
@@ -25,9 +26,11 @@ class TaskListBloc implements BlocBase<TaskListEvent, TaskListState> {
       state.add(TaskListLoading());
 
       _updateViewState();
-    } else if (event is TaskListCreate) {
+    } else if (event is TaskListSubmitted) {
       state.add(TaskListLoading());
+
       final text = event.text.trim(); // remove whitespaces
+
       if (!text.isEmpty) {
         _repository.addTask(text: text);
         _updateViewState();
@@ -44,11 +47,13 @@ class TaskListBloc implements BlocBase<TaskListEvent, TaskListState> {
 
   void _updateViewState() {
     _repository.getSortedTasks().then((tasks) {
-      final viewModels = tasks.map((t) => TaskViewModel(t));
+      final viewModels = tasks.map((t) => TaskViewModel(t)).toList();
       if (!viewModels.isEmpty) {
-        state.add(TaskListAdd(viewModels));
+        state.add(TaskListAdd(models: viewModels));
       } else {
-        state.add(TaskListEmpty());
+        state.add(TaskListEmpty(
+            body: _Constants.emptyStateBody,
+            header: _Constants.emptyStateHeader));
       }
     }).catchError((e) => state.add(TaskListError(message: e.toString())));
   }

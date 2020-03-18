@@ -1,47 +1,99 @@
-import 'dart:async';
+import 'dart:core';
 
 import 'package:flutter/material.dart';
+import 'package:quiver/async.dart';
 
 class TaskCell extends StatefulWidget {
   final String time, body;
-  final DateTime date;
-  final String Function(DateTime) timeLeftProducer;
+  final Duration timeLeft;
 
-  TaskCell({Key key, this.time, this.body, this.date, this.timeLeftProducer})
-      : super(key: key);
+  TaskCell({Key key, this.time, this.body, this.timeLeft}) : super(key: key);
 
   @override
   _TaskCellState createState() => _TaskCellState();
 }
 
-class _TaskCellState extends State<TaskCell> with TickerProviderStateMixin {
-  Timer _timer;
-  int _start = 10;
+class _TaskCellState extends State<TaskCell> {
+  CountdownTimer _timer;
+  String _timeLeft = "";
 
-  void startTimer() {
-    const oneSec = const Duration(seconds: 1);
-    _timer = new Timer.periodic(
-      oneSec,
-      (Timer timer) => setState(
-        () {
-          if (_start < 1) {
-            timer.cancel();
-          } else {
-            _start = _start - 1;
-          }
-        },
-      ),
+  void _startTimer() {
+    _timer?.cancel();
+    _timer = CountdownTimer(
+      widget.timeLeft,
+      Duration(seconds: 1),
     );
+    var sub = _timer.listen(null);
+
+    sub.onData((duration) {
+      setState(() {
+        final elapsed = _timer.elapsed;
+        final hoursLeft = widget.timeLeft.inHours;
+        final minutesLeft = widget.timeLeft.inMinutes;
+        final secondsLeft = widget.timeLeft.inSeconds;
+
+        final diffHours = hoursLeft - elapsed.inHours;
+        final diffMinutes = minutesLeft % 60 - elapsed.inMinutes % 60;
+        final seconds =
+            (elapsed.inSeconds <= secondsLeft % 60) ? secondsLeft % 60 : 60;
+        final elapsedSeconds = (elapsed.inSeconds <= secondsLeft % 60)
+            ? elapsed.inSeconds % 60
+            : (elapsed.inSeconds - secondsLeft % 60) % 60;
+        final diffSeconds = seconds - elapsedSeconds;
+
+        _timeLeft = "$diffHours час. $diffMinutes мин. $diffSeconds сек.";
+
+        _timeLeft += " осталось";
+      });
+    });
+
+    sub.onDone(() {
+      _timer.cancel();
+    });
   }
 
   // MARK:- Lifecycle methods
 
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void didUpdateWidget(TaskCell oldWidget) {
+    if (widget.timeLeft != null) {
+      _startTimer();
+    } else {
+      _timeLeft = "Без времени";
+    }
+    super.didUpdateWidget(oldWidget);
+  }
+
+  @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 7.0),
+      padding: EdgeInsets.all(16.0),
       child: Column(
-        children: <Widget>[Text("$widget.time $widget.body"), Text()],
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: <Widget>[
+          Text(
+            "${widget.time} ${widget.body}",
+            style: const TextStyle(fontSize: 17.0, fontWeight: FontWeight.w300),
+            textAlign: TextAlign.start,
+          ),
+          const SizedBox(height: 7.0),
+          Text(
+            _timeLeft,
+            textAlign: TextAlign.end,
+            style: const TextStyle(fontSize: 17.0, fontWeight: FontWeight.w300),
+          ),
+        ],
       ),
     );
   }

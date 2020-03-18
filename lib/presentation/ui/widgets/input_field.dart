@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:testapp/data/Constants.dart';
+import 'package:testapp/data/constants.dart';
+import 'package:testapp/utils.dart';
 
 class InputField extends StatefulWidget {
   final Function(String) submitHandler;
@@ -14,24 +15,27 @@ class InputField extends StatefulWidget {
 class _InputFieldState extends State<InputField> {
   // MARK:- Properties
 
-  String _text = "";
+  var _controller = TextEditingController();
 
   // MARK:- Functions
 
   void _onPressed() {
-    widget.submitHandler(_text);
-  }
-
-  void _onChanged(String txt) {
-    _text = txt;
+    widget.submitHandler(_controller.text);
+    _controller.clear();
+    KeyboardHelper.dismiss(context);
   }
 
   // MARK:- Lifecycle methods
 
   @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Container(
-      height: 80.0,
       decoration: BoxDecoration(
           color: Colors.white,
           boxShadow: [_Constants.boxShadow],
@@ -41,32 +45,33 @@ class _InputFieldState extends State<InputField> {
       child: Padding(
         padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 16.0),
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            TextField(
+            Expanded(
+              child: TextField(
                 decoration: InputDecoration(
-                  enabledBorder: OutlineInputBorder(
-                      borderSide:
-                          BorderSide(color: AppColors.lightGreen, width: 1.0)),
+                  focusedBorder: _Constants.textFieldBorder,
+                  enabledBorder: _Constants.textFieldBorder,
                   contentPadding: const EdgeInsets.symmetric(
                       horizontal: 9.0, vertical: 12.0),
                   hintText: _Constants.hintText,
                 ),
-                maxLines: 6,
-                onChanged: _onChanged),
+                style: const TextStyle(fontSize: _Constants.textFieldFontSize),
+                controller: _controller,
+                onSubmitted: (_) => _onPressed,
+              ),
+            ),
             SizedBox(
               width: 8.0,
             ),
-            MaterialButton(
+            FloatingActionButton(
               onPressed: _onPressed,
-              color: Colors.blue,
-              textColor: Colors.white,
-              child: Icon(
-                Icons.arrow_upward,
-                size: 24,
-              ),
-              padding: EdgeInsets.all(16),
+              elevation: 0.0,
+              backgroundColor: AppColors.blue,
               shape: CircleBorder(),
-            ),
+              child: Icon(Icons.arrow_upward),
+            )
           ],
         ),
       ),
@@ -81,7 +86,12 @@ class _Constants {
     blurRadius: 4.0,
   );
 
+  static const textFieldBorder = const OutlineInputBorder(
+      borderRadius: BorderRadius.all(Radius.circular(10.0)),
+      borderSide: BorderSide(color: AppColors.green, width: 1.0));
+
   static const borderRadius = Radius.circular(20.0);
 
   static const hintText = "Что нужно сделать?";
+  static const textFieldFontSize = 14.0;
 }

@@ -19,7 +19,11 @@ class EmptyCell extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
       child: Column(
         children: <Widget>[
-          Text(header, style: _Constants.headerTextStyle),
+          Text(
+            header,
+            style: _Constants.headerTextStyle,
+            textAlign: TextAlign.center,
+          ),
           SizedBox(
             height: 12.0,
           ),
@@ -28,6 +32,7 @@ class EmptyCell extends StatelessWidget {
             style: TextStyle(
                 color: _Constants.bodyColor.withOpacity(0.8),
                 fontSize: _Constants.bodyFontSize),
+            textAlign: TextAlign.center,
           )
         ],
       ),
